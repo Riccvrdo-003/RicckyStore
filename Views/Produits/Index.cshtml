@@ -1,0 +1,71 @@
+﻿@model List<Produits>
+@{
+}
+
+<h2 class="text-center mb-5">Liste des Produits</h2>
+
+<form asp-controller="Produits" asp-action="Search" method="get">
+    <div class="row mb-5">
+        <div class="col">
+            <a class="btn btn-primary" asp-controller="Produits" asp-action="Create">Ajouter un Produit</a>
+        </div>
+        
+        <div class="col d-flex">
+            <input class="form-control w-75 " type="search" name="searchString" placeholder="Rechercher par nom, catégorie ou marque" aria-label="Search">&nbsp;&nbsp;
+            <button class="btn btn-outline-success" type="submit">Rechercher</button>
+        </div>
+    </div>
+</form>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-warning" role="alert">
+        @ViewBag.Message
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Marque</th>
+            <th>Catégorie</th>
+            <th>Prix</th>
+            <th>Description</th>
+            <th>Image</th>
+            <th>Date d'ajout</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.id</td>
+                <td>@product.nom</td>
+                <td>@product.marque</td>
+                <td>@product.categorie</td>
+                <td>@(product.prix)$</td>
+                <td>@product.description</td>
+                <td><img src="/produitsImages/@product.imageFichierNom" width="100" /></td>
+                <td>@product.dateAjout.ToString("MM/dd/yyyy")</td>
+                <td style="white-space:nowrap">
+                    <a class="btn btn-primary btn-sm" asp-controller="Produits" asp-action="Edit"
+                        asp-route-id="@product.id">Modifier</a>
+                    <a class="btn btn-danger btn-sm" asp-controller="Produits" asp-action="Delete"
+                        asp-route-id="@product.id" onclick="return confirm('Voulez-vous vraiment supprimer ce produit ?')">Supprimer</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
